@@ -1,6 +1,15 @@
 # Notexio Text Editor
 
+> **Experience writing the way it should be: Simple. Fast. Yours.**
+
 Notexio is a lightweight, customizable and user-friendly text editor built with Python and Tkinter. It is designed as an OS-based project to demonstrate practical concepts of file I/O, GUI development, event-driven programming and basic operating system interactions.
+
+## Why Notexio?
+
+🚀 **Lightweight Performance**: Launches instantly, runs anywhere.
+🎨 **Deep Customization**: From "Dark Mode" to custom fonts, make it your own.
+🛡️ **Safety First**: Never lose your work with auto-save and crash recovery.
+📊 **Writer's Tools**: Built-in word count, reading time estimates, and duplicate word highlighting.
 
 ## Features
 
