@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Notexio — STAR Report + Demo</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="hero">
+      <h1>Notexio Text Editor</h1>
+      <p>
+        A lightweight, Windows Notepad–inspired text editor built with <strong>Python + Tkinter</strong>, focused on practical OS-style behaviors:
+        file I/O, event-driven UI, safety/recovery, and quality-of-life tooling.
+      </p>
+      <div class="badges">
+        <div class="badge"><strong>Tech</strong>: Python, Tkinter, ReportLab</div>
+        <div class="badge"><strong>Focus</strong>: GUI, file I/O, UX, reliability</div>
+        <div class="badge"><strong>Highlights</strong>: recovery, recent files, print/PDF, theming</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Short project introduction</h2>
+        <p>
+          Notexio is a modular Tkinter app that mimics familiar Notepad behaviors (menus, status bar, keyboard shortcuts), while adding
+          productivity features like document stats, duplicate-word highlighting, and PDF export.
+        </p>
+
+        <div class="hr"></div>
+
+        <h2>STAR report — challenges & solutions</h2>
+        <p class="small">Each STAR below is based on implemented features in this repository.</p>
+
+        <h3>1) Data loss prevention (unsaved changes + recovery)</h3>
+        <div class="star">
+          <div class="starBlock"><strong>Situation</strong><br/>Text editors are frustrating when users lose work (accidental close, crash, or switching files). A project-grade editor needs safety rails without becoming annoying.</div>
+          <div class="starBlock"><strong>Task</strong><br/>Implement safe file workflows: warn before losing unsaved changes, and support recovery files for interrupted sessions.</div>
+          <div class="starBlock"><strong>Action</strong><br/>
+            Built a reusable unsaved-changes check that gates <code>New</code>/<code>Open</code>/<code>Exit</code> flows, then added a recovery subsystem that periodically writes <code>.recovery</code> snapshots and offers restore on startup.
+            Kept it lightweight by saving only when the document is modified and by retaining only the most recent recovery files.
+          </div>
+          <div class="starBlock"><strong>Result</strong><br/>Users get predictable prompts, fewer accidental losses, and a clear restore path after interruptions. The editor behaves more like a real desktop app instead of a demo script.</div>
+        </div>
+
+        <h3>2) “Feels native” UI behavior in Tkinter (status bar + line numbers)</h3>
+        <div class="star">
+          <div class="starBlock"><strong>Situation</strong><br/>Tkinter is powerful but low-level—getting modern, responsive, Notepad-style UI feedback (cursor position, character counts, modification indicator) requires careful event wiring.</div>
+          <div class="starBlock"><strong>Task</strong><br/>Deliver a UI that updates immediately as users type and navigate, while keeping layout clean (toolbar, status bar, optional line numbers).</div>
+          <div class="starBlock"><strong>Action</strong><br/>
+            Added a status bar that listens to key/mouse events and computes cursor position + character counts. Implemented optional line numbers that stay in sync with scrolling and document edits.
+            Organized UI code in a dedicated component so behavior stays testable and maintainable.
+          </div>
+          <div class="starBlock"><strong>Result</strong><br/>The app provides continuous feedback (Ln/Col, file name, “*” modified indicator, character counts) and a familiar layout, improving usability and perceived quality.</div>
+        </div>
+
+        <h3>3) Cross-platform-ish printing and PDF export</h3>
+        <div class="star">
+          <div class="starBlock"><strong>Situation</strong><br/>Printing/PDF export behave differently across Windows/macOS/Linux, and GUI apps need graceful fallback when optional dependencies aren’t installed.</div>
+          <div class="starBlock"><strong>Task</strong><br/>Support print + print preview + PDF export, with clear messaging when a platform dependency isn’t available.</div>
+          <div class="starBlock"><strong>Action</strong><br/>
+            Implemented Windows printing via <code>pywin32</code> (when available), and shell-based printing on macOS/Linux. Added PDF export through ReportLab and surfaced friendly install hints when imports fail.
+          </div>
+          <div class="starBlock"><strong>Result</strong><br/>Users can print/export in common environments, and when the environment isn’t set up, they get actionable guidance rather than a crash.</div>
+        </div>
+
+        <div class="hr"></div>
+
+        <h2>2–5 minute video demo script (record this)</h2>
+        <div class="callout">
+          Keep the recording tight: show the UX first, then point out how it’s structured (modules/managers), then close with reliability features.
+        </div>
+        <ul>
+          <li><strong>0:00–0:20 — Intro</strong>: “Hi, this is Notexio, a Python/Tkinter text editor with Notepad-like UX plus safety and productivity tools.”</li>
+          <li><strong>0:20–1:10 — Core file workflow</strong>: <span class="kbd">Ctrl+N</span>, <span class="kbd">Ctrl+O</span>, type text, show the <code>*</code> unsaved indicator, then <span class="kbd">Ctrl+S</span>.</li>
+          <li><strong>1:10–1:40 — Safety</strong>: make an edit, attempt to open another file or exit, show the unsaved-changes prompt. Mention recovery snapshots + restore on startup.</li>
+          <li><strong>1:40–2:20 — Productivity tools</strong>: Document statistics, reading time, highlight duplicate words, remove extra spaces.</li>
+          <li><strong>2:20–3:10 — UI polish</strong>: status bar Ln/Col + character count, toggle line numbers, zoom in/out, word wrap, fullscreen.</li>
+          <li><strong>3:10–4:00 — Theming + export</strong>: light/dark mode, then export as PDF (or explain dependency behavior if not installed).</li>
+          <li><strong>4:00–4:30 — Close</strong>: summarize architecture: dedicated managers (file/safety/theme/view/tools) and clean separation of concerns.</li>
+        </ul>
+
+        <div class="hr"></div>
+
+        <h2>GitHub Pages submission</h2>
+        <ol>
+          <li>In GitHub: <strong>Settings → Pages</strong></li>
+          <li><strong>Build and deployment</strong> → Source: <strong>Deploy from a branch</strong></li>
+          <li>Branch: your default branch (often <code>main</code>)</li>
+          <li>Folder: <code>/docs</code></li>
+          <li>Save → wait for Pages to publish → submit that URL.</li>
+        </ol>
+        <p class="small">
+          Once published, your link will look like: <code>https://&lt;username&gt;.github.io/&lt;repo&gt;/</code>
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>“Be creative” skills spotlight</h2>
+        <ul>
+          <li><strong>Desktop UX</strong>: Notepad-like menus, toolbar, status bar, keyboard-first workflow.</li>
+          <li><strong>Reliability</strong>: unsaved-change gating + recovery snapshots to reduce data loss.</li>
+          <li><strong>Modular design</strong>: separate managers for file, safety, theme, tools, view, formatting.</li>
+          <li><strong>Cross-platform mindset</strong>: printing/PDF features with graceful dependency fallbacks.</li>
+        </ul>
+
+        <div class="hr"></div>
+
+        <h2>Quick run instructions</h2>
+        <p class="small">Local run (for your demo):</p>
+        <ul>
+          <li><span class="kbd">pip install -r requirements.txt</span></li>
+          <li><span class="kbd">python main.py</span></li>
+        </ul>
+
+        <div class="hr"></div>
+
+        <h2>Where the STAR evidence lives</h2>
+        <ul>
+          <li><code>src/file_manager.py</code>: unsaved-change prompts, recent files</li>
+          <li><code>src/safety_features.py</code>: recovery snapshots + restore flow</li>
+          <li><code>src/ui_components.py</code>: status bar + line numbers</li>
+          <li><code>src/misc_features.py</code>: print/preview + PDF export</li>
+          <li><code>main.py</code>: wiring managers + keyboard shortcuts</li>
+        </ul>
+
+        <div class="footer">
+          Tip: In your submission, paste the GitHub Pages link plus your recorded demo video link (Drive/YouTube/unlisted), if required.
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

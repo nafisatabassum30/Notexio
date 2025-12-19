@@ -92,6 +92,22 @@ Run the application:
 python main.py
 ```
 
+## STAR Report + GitHub Pages Submission
+
+This repo includes a ready-to-publish GitHub Pages site with:
+- a **STAR-formatted report** (Situation / Task / Action / Result)
+- a **2–5 minute demo script** you can record against
+
+### Publish the report on GitHub Pages
+
+1. In GitHub: **Settings → Pages**
+2. Under **Build and deployment**, choose **Deploy from a branch**
+3. Select your default branch (often `main`)
+4. Select folder: **`/docs`**
+5. Save, wait for the site to publish, then submit the Pages URL.
+
+The site content is in `docs/index.html`.
+
 ## Keyboard Shortcuts
 
 - **Ctrl+N**: New File
