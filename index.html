@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notexio - Modern Python Text Editor</title>
+    <style>
+        :root {
+            --primary-color: #0078D4;
+            --bg-color: #f8f9fa;
+            --text-color: #333;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        header {
+            background-color: var(--card-bg);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .section {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+            color: #2c3e50;
+        }
+
+        .star-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .star-label {
+            font-weight: bold;
+            color: var(--primary-color);
+            display: block;
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .video-placeholder {
+            background-color: #eee;
+            width: 100%;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            color: #666;
+            margin-top: 1rem;
+            border: 2px dashed #ccc;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Notexio</h1>
+        <div class="subtitle">A Lightweight, Customizable Python Text Editor</div>
+    </header>
+
+    <div class="container">
+        <!-- Introduction Section -->
+        <section class="section">
+            <h2>About the Project</h2>
+            <p>
+                Notexio is a lightweight, customizable, and user-friendly text editor built with Python and Tkinter. 
+                Designed to provide a modern editing experience similar to Windows Notepad but with enhanced capabilities, 
+                Notexio features a clean interface, dark/light mode theming, rich text formatting, and essential tools like 
+                word counting and reading time estimation.
+            </p>
+            <p>
+                The project demonstrates practical application of operating system concepts including file I/O operations, 
+                event-driven GUI programming, and process management. Key features include robust file safety mechanisms 
+                (auto-save and recovery), drag-and-drop support, and a modular architecture.
+            </p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <strong>Rich Formatting</strong><br>
+                    Custom fonts, colors, and styles
+                </div>
+                <div class="feature-card">
+                    <strong>Smart Tools</strong><br>
+                    Word count, reading time, stats
+                </div>
+                <div class="feature-card">
+                    <strong>Safety First</strong><br>
+                    Auto-save and crash recovery
+                </div>
+            </div>
+        </section>
+
+        <!-- Video Demo Section -->
+        <section class="section">
+            <h2>Project Demo</h2>
+            <p>Watch a quick demonstration of Notexio in action:</p>
+            <div class="video-placeholder">
+                <!-- Replace this div with your embedded video iframe (e.g., YouTube) -->
+                <div>
+                    <h3>Demo Video Placeholder</h3>
+                    <p>Embed your 2-5 minute video here</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- STAR Report Section -->
+        <section class="section">
+            <h2>Technical Challenge: Synchronized Line Numbers</h2>
+            <p><em>A look at how we solved a key UI synchronization challenge during development.</em></p>
+            
+            <div class="star-item">
+                <span class="star-label">Situation</span>
+                <p>The standard Tkinter `Text` widget provides a powerful interface for editing text but lacks built-in support for a line number margin. Users found it difficult to reference specific parts of their document without visible line indicators.</p>
+            </div>
+
+            <div class="star-item">
+                <span class="star-label">Task</span>
+                <p>The goal was to implement a toggleable line number column that automatically updates when lines are added/removed, scrolls in perfect synchronization with the main text, and maintains visual consistency with the theme.</p>
+            </div>
+
+            <div class="star-item">
+                <span class="star-label">Action</span>
+                <p>I implemented a dual-widget architecture using a separate `Canvas` for line numbers. I bound specific events (KeyRelease, Scroll) to a custom update function and linked the Y-scroll commands of both widgets. This ensured that scrolling one widget automatically scrolls the other, and modifications trigger an immediate redraw of the line numbers.</p>
+            </div>
+
+            <div class="star-item">
+                <span class="star-label">Result</span>
+                <p>The result is a seamless, native-feeling line number feature. It significantly improved the editor's usability for coding and technical writing, with zero lag during scrolling or typing.</p>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>Notexio Project Submission &copy; 2025</p>
+    </footer>
+
+</body>
+</html>
