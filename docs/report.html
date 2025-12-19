@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Notexio — STAR Report</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --text:#e8ecff;
+      --muted:rgba(232,236,255,.74);
+      --panel:rgba(255,255,255,.06);
+      --border:rgba(232,236,255,.14);
+      --brand:#7c5cff;
+      --radius:16px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      background:
+        radial-gradient(950px 520px at 18% 8%, rgba(124,92,255,.28), transparent 55%),
+        radial-gradient(850px 520px at 84% 18%, rgba(46,229,157,.18), transparent 60%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.6;
+    }
+    .wrap{ max-width: 980px; margin: 0 auto; padding: 26px 18px 70px; }
+    .top{
+      display:flex; justify-content:space-between; gap:12px; align-items:flex-start; flex-wrap:wrap;
+      padding: 14px 16px;
+      border:1px solid var(--border);
+      background:rgba(0,0,0,.18);
+      border-radius: var(--radius);
+    }
+    a{ color: var(--text); text-decoration:none }
+    a:hover{ text-decoration:underline }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.05);
+      font-size:14px;
+    }
+    h1{ margin: 16px 0 8px; font-size: 34px; line-height: 1.2; }
+    h2{ margin: 18px 0 8px; font-size: 20px; }
+    h3{ margin: 14px 0 6px; font-size: 16px; color: rgba(232,236,255,.92) }
+    p{ margin: 8px 0; color: var(--muted) }
+    .card{
+      margin-top: 14px;
+      border:1px solid var(--border);
+      background: var(--panel);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    ul{ margin: 8px 0 0; padding-left: 18px; color: var(--muted) }
+    li{ margin: 6px 0 }
+    code{ font-family: var(--mono); background: rgba(0,0,0,.18); padding: 2px 6px; border-radius: 8px; border: 1px solid rgba(232,236,255,.10) }
+    .label{ font-family: var(--mono); font-size: 12px; letter-spacing: .4px; text-transform: uppercase; color: rgba(232,236,255,.62) }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <div class="label">Notexio</div>
+        <div style="font-weight:700">STAR-format challenges report</div>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap">
+        <a class="pill" href="index.html">← Home</a>
+        <a class="pill" href="../REPORT_STAR.md">View Markdown report</a>
+      </div>
+    </div>
+
+    <h1>STAR Report</h1>
+    <p>
+      This report summarizes key development challenges faced while building <b>Notexio</b>, a Python/Tkinter text editor.
+      Each challenge is documented using the STAR method: <b>Situation</b>, <b>Task</b>, <b>Action</b>, <b>Result</b>.
+    </p>
+
+    <div class="card">
+      <h2>Challenge 1 — Keeping the app maintainable as features grew</h2>
+      <h3>Situation</h3>
+      <p>As features expanded (file ops, formatting, view controls, tools, themes, safety), a monolithic structure became fragile and hard to debug.</p>
+      <h3>Task</h3>
+      <p>Keep the codebase easy to extend while preserving a consistent UI and editor state.</p>
+      <h3>Action</h3>
+      <ul>
+        <li>Split the code into focused modules such as <code>file_manager.py</code>, <code>formatter.py</code>, <code>theme_manager.py</code>, <code>safety_features.py</code>.</li>
+        <li>Used <code>main.py</code> as the composition root to wire dependencies cleanly.</li>
+        <li>Standardized editor state updates (title/status/modified flag) so features behave consistently.</li>
+      </ul>
+      <h3>Result</h3>
+      <p>Changes became safer and faster: features were easier to locate, bugs were easier to isolate, and the UI stayed coherent.</p>
+    </div>
+
+    <div class="card">
+      <h2>Challenge 2 — Preventing data loss (unsaved changes + recovery)</h2>
+      <h3>Situation</h3>
+      <p>Text editors must be trusted—accidental closes, crashes, or forgetting to save can lose important work.</p>
+      <h3>Task</h3>
+      <p>Warn users on exit when there are unsaved changes and offer recovery when possible.</p>
+      <h3>Action</h3>
+      <ul>
+        <li>Tracked changes using Tkinter’s <code>&lt;&lt;Modified&gt;&gt;</code> event and displayed an unsaved indicator (<code>*</code>) in the title.</li>
+        <li>Added a warn-on-exit workflow for modified documents.</li>
+        <li>Implemented recovery file detection on startup and a restore prompt.</li>
+      </ul>
+      <h3>Result</h3>
+      <p>Users are protected from accidental data loss and can restore work after interruptions, improving reliability and confidence.</p>
+    </div>
+
+    <div class="card">
+      <h2>Challenge 3 — Building a polished “Notepad-like” UX in Tkinter</h2>
+      <h3>Situation</h3>
+      <p>Tkinter requires manual wiring for modern editor UX (shortcuts, status updates, line numbers, zoom, themes) and small mistakes can create inconsistent behavior.</p>
+      <h3>Task</h3>
+      <p>Deliver a smooth editing experience with productivity features and predictable keyboard shortcuts.</p>
+      <h3>Action</h3>
+      <ul>
+        <li>Implemented familiar menus + accelerators and bound shortcuts (Ctrl+S/Ctrl+F/Ctrl+H/etc.).</li>
+        <li>Added toolbar/status bar updates tied to editor state and caret movement.</li>
+        <li>Implemented zoom, fullscreen, word wrap toggle, optional line numbers, and light/dark themes.</li>
+      </ul>
+      <h3>Result</h3>
+      <p>The editor feels familiar and efficient while showcasing event-driven design, careful UI wiring, and attention to UX details.</p>
+    </div>
+
+  </div>
+</body>
+</html>

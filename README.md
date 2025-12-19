@@ -92,6 +92,22 @@ Run the application:
 python main.py
 ```
 
+## GitHub Pages (Submission Site)
+
+This repo includes a ready-to-publish GitHub Pages site in `docs/`.
+
+- **Enable Pages**: GitHub → **Settings** → **Pages** → **Build and deployment**
+  - **Source**: Deploy from a branch
+  - **Branch**: `main`
+  - **Folder**: `/docs`
+- **Your site link** will look like:
+  - `https://<github-username>.github.io/<repository-name>/`
+
+### Video demo (2–5 minutes)
+
+- Open `docs/index.html` and replace the placeholder `DEMO_VIDEO_URL_HERE` with your uploaded demo link (YouTube/Drive/etc.).
+- Suggested flow for the demo: intro → open file → edit → find/replace → theme toggle → unsaved warning/recovery.
+
 ## Keyboard Shortcuts
 
 - **Ctrl+N**: New File

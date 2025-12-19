@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Notexio — Python/Tkinter Text Editor</title>
+  <style>
+    :root{
+      --bg: #0b1020;
+      --panel: rgba(255,255,255,.06);
+      --panel2: rgba(255,255,255,.09);
+      --text: #e8ecff;
+      --muted: rgba(232,236,255,.72);
+      --brand: #7c5cff;
+      --brand2: #2ee59d;
+      --border: rgba(232,236,255,.14);
+      --shadow: 0 20px 55px rgba(0,0,0,.45);
+      --radius: 16px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color: var(--text);
+      background:
+        radial-gradient(1000px 500px at 12% 8%, rgba(124,92,255,.35), transparent 55%),
+        radial-gradient(850px 520px at 84% 18%, rgba(46,229,157,.22), transparent 60%),
+        radial-gradient(900px 600px at 50% 110%, rgba(255,255,255,.10), transparent 55%),
+        var(--bg);
+      line-height:1.55;
+    }
+    a{color: var(--text); text-decoration: none}
+    a:hover{ text-decoration: underline }
+    .wrap{ max-width: 1100px; margin: 0 auto; padding: 28px 18px 70px; }
+    .nav{
+      display:flex; gap:14px; align-items:center; justify-content:space-between;
+      position: sticky; top: 0; z-index: 10;
+      padding: 14px 18px;
+      margin: -28px -18px 22px;
+      background: rgba(11,16,32,.72);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .brand{ display:flex; gap:10px; align-items:center; font-weight:700; letter-spacing:.2px; }
+    .logo{
+      width: 34px; height: 34px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
+      box-shadow: 0 8px 22px rgba(124,92,255,.25);
+    }
+    .navlinks{ display:flex; gap:14px; flex-wrap:wrap; justify-content:flex-end }
+    .pill{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 14px;
+    }
+    .hero{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 18px;
+      align-items: stretch;
+      margin-top: 6px;
+    }
+    @media (max-width: 900px){
+      .hero{ grid-template-columns: 1fr; }
+      .nav{ position: static; }
+    }
+    .card{
+      border: 1px solid var(--border);
+      background: var(--panel);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    .card2{
+      border: 1px solid var(--border);
+      background: var(--panel2);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    h1{ margin: 0 0 10px; font-size: 42px; line-height: 1.12; }
+    h2{ margin: 0 0 10px; font-size: 22px; }
+    p{ margin: 10px 0; color: var(--muted) }
+    .kpi{ display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px }
+    .k{ border:1px solid var(--border); background: rgba(0,0,0,.18); padding:8px 10px; border-radius: 12px; font-size: 13px; color: var(--muted) }
+    .k b{ color: var(--text) }
+    .grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 14px }
+    @media (max-width: 900px){ .grid{ grid-template-columns: 1fr; } }
+    .feat h3{ margin: 0 0 6px; font-size: 16px }
+    .feat p{ margin: 0; font-size: 14px }
+    .mono{ font-family: var(--mono) }
+    .cta{
+      display:flex; gap: 12px; flex-wrap:wrap;
+      margin-top: 14px;
+    }
+    .btn{
+      display:inline-flex; align-items:center; gap:10px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      font-weight: 600;
+    }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(124,92,255,.85), rgba(46,229,157,.55));
+      border-color: rgba(255,255,255,.18);
+    }
+    .section{ margin-top: 18px }
+    .list{ margin: 10px 0 0; padding-left: 18px; color: var(--muted) }
+    .list li{ margin: 6px 0 }
+    .video{
+      border: 1px dashed rgba(232,236,255,.28);
+      background: rgba(0,0,0,.18);
+      border-radius: var(--radius);
+      padding: 14px;
+    }
+    .footer{ margin-top: 30px; color: rgba(232,236,255,.55); font-size: 13px }
+    code{ font-family: var(--mono); background: rgba(0,0,0,.20); padding: 2px 6px; border-radius: 8px; border: 1px solid rgba(232,236,255,.10) }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <div>Notexio</div>
+        <div style="font-size:12px; color: rgba(232,236,255,.62)">Python/Tkinter Text Editor</div>
+      </div>
+    </div>
+    <div class="navlinks">
+      <a class="pill" href="#features">Features</a>
+      <a class="pill" href="#demo">Video demo</a>
+      <a class="pill" href="report.html">STAR report</a>
+      <a class="pill" href="#run">Run</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="hero">
+      <div class="card">
+        <h1>Notexio — a clean, modern text editor built in Python.</h1>
+        <p>
+          A lightweight, customizable editor with file safety features, formatting controls, themes, and productivity tools—implemented with Tkinter.
+        </p>
+        <div class="kpi">
+          <div class="k"><b>Tech</b>: Python + Tkinter</div>
+          <div class="k"><b>Focus</b>: UX + OS I/O</div>
+          <div class="k"><b>Highlights</b>: autosave/recovery, theming</div>
+        </div>
+        <div class="cta">
+          <a class="btn primary" href="#demo">Watch demo (2–5 min)</a>
+          <a class="btn" href="report.html">Read STAR report</a>
+        </div>
+      </div>
+
+      <div class="card2">
+        <h2>What I’m showcasing</h2>
+        <ul class="list">
+          <li><b>System design</b>: feature modules instead of a monolith</li>
+          <li><b>UX details</b>: shortcuts, status bar, line numbers, zoom</li>
+          <li><b>Reliability</b>: unsaved-change protection + recovery workflow</li>
+        </ul>
+        <div class="section" style="margin-top:14px">
+          <h2 class="mono" style="font-size:14px; margin-bottom:6px">Repo entry point</h2>
+          <div class="mono" style="color: rgba(232,236,255,.70)">python <code>main.py</code></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="features" class="section">
+      <div class="card">
+        <h2>Features</h2>
+        <div class="grid">
+          <div class="feat">
+            <h3>File operations</h3>
+            <p>New/Open/Save/Save As + recent files + unsaved detection.</p>
+          </div>
+          <div class="feat">
+            <h3>Edit tools</h3>
+            <p>Undo/redo, find/replace, go-to-line, clipboard actions.</p>
+          </div>
+          <div class="feat">
+            <h3>Formatting & themes</h3>
+            <p>Font controls, bold/italic/underline, light/dark mode.</p>
+          </div>
+          <div class="feat">
+            <h3>View controls</h3>
+            <p>Zoom in/out/reset, fullscreen toggle, word wrap, line numbers.</p>
+          </div>
+          <div class="feat">
+            <h3>Productivity tools</h3>
+            <p>Word/line/character stats, reading time, duplicate highlighting.</p>
+          </div>
+          <div class="feat">
+            <h3>Safety features</h3>
+            <p>Recovery file creation + restore prompt on startup.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="demo" class="section">
+      <div class="card">
+        <h2>Video demo (2–5 minutes)</h2>
+        <div class="video">
+          <p style="margin-top:0">
+            Paste your demo link here before submission:
+            <br />
+            <code>DEMO_VIDEO_URL_HERE</code>
+          </p>
+          <ul class="list">
+            <li>Suggested flow: intro → open file → edit → find/replace → theme toggle → recovery/unsaved warning.</li>
+            <li>If you upload to YouTube, you can also embed it by replacing this block with an <code>&lt;iframe&gt;</code>.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="run" class="section">
+      <div class="card">
+        <h2>How to run</h2>
+        <p class="mono">pip install -r <code>requirements.txt</code></p>
+        <p class="mono">python <code>main.py</code></p>
+        <ul class="list">
+          <li>Optional: <code>tkinterdnd2</code> for enhanced drag & drop (Windows).</li>
+          <li>Optional: <code>pywin32</code> for printing on Windows.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div>© 2025 Notexio — educational OS/GUI project</div>
+    </div>
+  </div>
+</body>
+</html>
