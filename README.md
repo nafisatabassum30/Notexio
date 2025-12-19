@@ -2,6 +2,11 @@
 
 Notexio is a lightweight, customizable and user-friendly text editor built with Python and Tkinter. It is designed as an OS-based project to demonstrate practical concepts of file I/O, GUI development, event-driven programming and basic operating system interactions.
 
+## Submission (Report + GitHub Page + Demo Script)
+
+- **GitHub Pages (submission link)**: https://nafisatabassum30.github.io/Notexio/
+- **STAR report + 2–5 min demo script**: `SUBMISSION.md`
+
 ## Features
 
 ### File Operations

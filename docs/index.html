@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Notexio — Submission</title>
+    <meta name="description" content="Notexio Text Editor (Python/Tkinter) — STAR report, demo script, and project highlights." />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="container">
+      <p class="kicker">Python • Tkinter • File I/O • GUI • Safety features</p>
+      <h1>Notexio Text Editor</h1>
+      <p class="lead">
+        A lightweight, customizable editor built in Python + Tkinter to demonstrate OS-project fundamentals
+        (file I/O, event-driven GUI, persistence) with practical features like recovery, recent files, themes,
+        and PDF export.
+      </p>
+      <div class="links">
+        <a class="btn" href="https://github.com/nafisatabassum30/Notexio" target="_blank" rel="noreferrer">View repository</a>
+        <a class="btn secondary" href="#video">Demo video script</a>
+        <a class="btn secondary" href="#star">STAR report</a>
+      </div>
+    </header>
+
+    <main class="container">
+      <section>
+        <h2>Project highlights</h2>
+        <div class="grid">
+          <div class="card">
+            <h3>Safe editing</h3>
+            <p>Unsaved-changes prompts + recovery snapshots to reduce accidental data loss.</p>
+          </div>
+          <div class="card">
+            <h3>Clean UX</h3>
+            <p>Status bar with Ln/Col + character count, toolbar, optional line numbers, fullscreen.</p>
+          </div>
+          <div class="card">
+            <h3>Productivity</h3>
+            <p>Find/Replace, Go To Line, formatting controls, zoom, word wrap, statistics tools.</p>
+          </div>
+          <div class="card">
+            <h3>Portable extras</h3>
+            <p>PDF export (ReportLab), print/preview, and optional drag & drop support.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="star">
+        <h2>STAR report — challenges faced</h2>
+
+        <div class="stack">
+          <article class="card">
+            <h3>1) Preventing data loss (unsaved changes + recovery)</h3>
+            <ul>
+              <li><strong>Situation</strong>: Users can lose edits by closing/opening another file unexpectedly.</li>
+              <li><strong>Task</strong>: Add safety checks and a lightweight recovery system.</li>
+              <li><strong>Action</strong>:
+                <ul>
+                  <li>Unsaved-change guard with Yes/No/Cancel save flow.</li>
+                  <li>Recovery snapshots saved to <code>recovery/</code> with timestamps; keep newest only.</li>
+                  <li>Startup scan + restore prompt for newest recovery file.</li>
+                </ul>
+              </li>
+              <li><strong>Result</strong>: Fewer data-loss scenarios; predictable safety behavior for users.</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3>2) Keeping code maintainable as features grew</h3>
+            <ul>
+              <li><strong>Situation</strong>: Feature growth can turn a Tkinter app into a “god file”.</li>
+              <li><strong>Task</strong>: Keep responsibilities separated and integration straightforward.</li>
+              <li><strong>Action</strong>:
+                <ul>
+                  <li>Split functionality into focused classes/modules (file ops, safety, UI, settings, etc.).</li>
+                  <li>Centralize wiring in <code>main.py</code> (composition root).</li>
+                  <li>Standardize UI updates (title/status/line numbers) to reduce duplicated state logic.</li>
+                </ul>
+              </li>
+              <li><strong>Result</strong>: Easier debugging and faster iteration; new features don’t ripple across the codebase.</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3>3) Cross-platform extras (PDF export + printing + drag/drop)</h3>
+            <ul>
+              <li><strong>Situation</strong>: Printing and drag/drop are OS-specific and easy to break.</li>
+              <li><strong>Task</strong>: Deliver these features while preserving portability.</li>
+              <li><strong>Action</strong>:
+                <ul>
+                  <li>PDF export using ReportLab as an optional dependency.</li>
+                  <li>Printing: Windows via optional <code>pywin32</code>; Linux/macOS via <code>lp/lpr</code> fallback.</li>
+                  <li>Drag/drop: optional <code>tkinterdnd2</code> on Windows; graceful fallback elsewhere.</li>
+                </ul>
+              </li>
+              <li><strong>Result</strong>: Feature-rich experience without OS lock-in; clear fallbacks and user messaging.</li>
+            </ul>
+          </article>
+        </div>
+
+        <p class="note">Full text version: see <code>SUBMISSION.md</code> in the repository root.</p>
+      </section>
+
+      <section id="video">
+        <h2>2–5 minute demo video script</h2>
+        <p class="lead">Target length: ~3:30.</p>
+
+        <ol class="steps">
+          <li><strong>0:00–0:15</strong> — Intro: what Notexio is and what you’re demonstrating.</li>
+          <li><strong>0:15–0:45</strong> — New/Open/Save As: type a few lines and save to .txt.</li>
+          <li><strong>0:45–1:20</strong> — Find/Replace + Go To Line (show shortcuts).</li>
+          <li><strong>1:20–1:55</strong> — Status bar + toggle line numbers.</li>
+          <li><strong>1:55–2:30</strong> — Safety: make a change, trigger unsaved prompt; mention recovery restore.</li>
+          <li><strong>2:30–3:05</strong> — Theme switch + Export as PDF.</li>
+          <li><strong>3:05–3:30</strong> — Code tour: modules + separation of concerns; close with links.</li>
+        </ol>
+
+        <p class="note">
+          Recording tip: keep your mouse movements deliberate and use shortcuts on-screen
+          (<code>Ctrl+S</code>, <code>Ctrl+F</code>, <code>Ctrl+H</code>) to highlight efficiency.
+        </p>
+      </section>
+
+      <section>
+        <h2>How to run locally</h2>
+        <pre><code>python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python3 main.py</code></pre>
+      </section>
+    </main>
+
+    <footer class="container footer">
+      <p>
+        © 2025 • Notexio •
+        <a href="https://github.com/nafisatabassum30/Notexio" target="_blank" rel="noreferrer">GitHub repo</a>
+      </p>
+    </footer>
+  </body>
+</html>
