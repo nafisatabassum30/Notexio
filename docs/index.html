@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Notexio — STAR Report & Demo</title>
+    <meta
+      name="description"
+      content="Notexio Text Editor: STAR challenges report, GitHub Pages submission, and a 2–5 minute demo script."
+    />
+    <style>
+      :root {
+        --bg: #0b1020;
+        --panel: rgba(255, 255, 255, 0.06);
+        --text: rgba(255, 255, 255, 0.92);
+        --muted: rgba(255, 255, 255, 0.72);
+        --border: rgba(255, 255, 255, 0.12);
+        --accent: #7dd3fc;
+        --accent2: #a7f3d0;
+        --code: rgba(125, 211, 252, 0.14);
+        --shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+          "Apple Color Emoji", "Segoe UI Emoji";
+        color: var(--text);
+        background: radial-gradient(1200px 700px at 20% -10%, rgba(125, 211, 252, 0.25), transparent),
+          radial-gradient(900px 600px at 100% 0%, rgba(167, 243, 208, 0.18), transparent),
+          radial-gradient(900px 900px at 30% 110%, rgba(167, 243, 208, 0.12), transparent),
+          var(--bg);
+      }
+
+      a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+
+      .wrap {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 40px 18px 64px;
+      }
+
+      header {
+        padding: 26px 22px;
+        border: 1px solid var(--border);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+      }
+
+      .title {
+        margin: 0;
+        font-size: 30px;
+        letter-spacing: -0.02em;
+      }
+      .subtitle {
+        margin: 10px 0 0;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 14px;
+        margin-top: 18px;
+      }
+      .card {
+        grid-column: span 12;
+        padding: 18px 18px;
+        border: 1px solid var(--border);
+        background: var(--panel);
+        border-radius: 14px;
+      }
+      @media (min-width: 860px) {
+        .card.half {
+          grid-column: span 6;
+        }
+      }
+
+      h2 {
+        margin: 28px 0 10px;
+        font-size: 18px;
+        letter-spacing: -0.01em;
+      }
+      h3 {
+        margin: 0 0 10px;
+        font-size: 16px;
+        letter-spacing: -0.01em;
+      }
+      p,
+      li {
+        color: var(--muted);
+        line-height: 1.6;
+      }
+      ul {
+        margin: 10px 0 0 18px;
+      }
+      code {
+        background: var(--code);
+        padding: 2px 6px;
+        border-radius: 8px;
+        border: 1px solid rgba(125, 211, 252, 0.22);
+        color: var(--text);
+      }
+
+      .badgeRow {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+      .badge {
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.05);
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .badge strong {
+        color: var(--text);
+        font-weight: 600;
+      }
+
+      .note {
+        margin-top: 10px;
+        padding: 10px 12px;
+        border: 1px dashed rgba(255, 255, 255, 0.18);
+        border-radius: 12px;
+        background: rgba(0, 0, 0, 0.18);
+      }
+
+      footer {
+        margin-top: 34px;
+        padding-top: 14px;
+        color: rgba(255, 255, 255, 0.55);
+        border-top: 1px solid rgba(255, 255, 255, 0.10);
+        font-size: 13px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <header>
+        <h1 class="title">Notexio Text Editor</h1>
+        <p class="subtitle">
+          A lightweight, Windows Notepad-inspired editor built with <strong>Python + Tkinter</strong>.
+          This page contains the STAR-format challenges report, GitHub Pages submission instructions,
+          and a 2–5 minute demo script you can record.
+        </p>
+        <div class="badgeRow">
+          <div class="badge"><strong>Tech</strong>: Python, Tkinter</div>
+          <div class="badge"><strong>Focus</strong>: File I/O, GUI, safety, cross-platform</div>
+          <div class="badge"><strong>Repo</strong>: <em>(link it in README)</em></div>
+        </div>
+      </header>
+
+      <h2>Project snapshot</h2>
+      <div class="grid">
+        <div class="card half">
+          <h3>What it does</h3>
+          <ul>
+            <li>New/Open/Save/Save As + “Open Recent”</li>
+            <li>Undo/Redo, Find/Replace, Go To Line</li>
+            <li>Status bar: line/column + character count + modified indicator</li>
+            <li>Optional: line numbers, printing, PDF export</li>
+          </ul>
+        </div>
+        <div class="card half">
+          <h3>How it’s structured</h3>
+          <ul>
+            <li><code>Editor</code>: main text widget + modified state</li>
+            <li><code>FileManager</code>: file dialogs, recent files, save flow</li>
+            <li><code>SafetyFeatures</code>: recovery snapshots + exit warning</li>
+            <li><code>UIComponents</code>: toolbar/status bar/line numbers</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2>STAR challenges report</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>STAR #1 — Preventing data loss (unsaved changes, recovery, auto-save)</h3>
+          <ul>
+            <li><strong>Situation</strong>: Closing or crashing can instantly lose work; state can desync.</li>
+            <li><strong>Task</strong>: Add a safe save/exit flow + recovery snapshots + restore on startup.</li>
+            <li>
+              <strong>Action</strong>:
+              tracked modified state (<code>&lt;&lt;Modified&gt;&gt;</code>), reused one save/exit gate
+              (<code>check_unsaved_changes</code>), created bounded recovery snapshots, and prompted restore.
+            </li>
+            <li><strong>Result</strong>: Users get warned before losing work and can recover after unexpected exits.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>STAR #2 — Responsive UI updates (status bar + optional line numbers)</h3>
+          <ul>
+            <li><strong>Situation</strong>: Updating counts/position on every keystroke can cause lag.</li>
+            <li><strong>Task</strong>: Provide Notepad-style live status readouts without slowing typing.</li>
+            <li>
+              <strong>Action</strong>:
+              centralized updates in <code>update_status_bar</code>, used <code>after(...)</code> scheduling,
+              and made line numbers opt-in with guarded updates + scroll sync.
+            </li>
+            <li><strong>Result</strong>: Real-time feedback stays smooth; line numbers only cost when enabled.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>STAR #3 — Cross-platform features with optional dependencies</h3>
+          <ul>
+            <li><strong>Situation</strong>: Printing/PDF/drag & drop differ by OS and often need extra packages.</li>
+            <li><strong>Task</strong>: Keep the core editor stable everywhere and enable extras when possible.</li>
+            <li>
+              <strong>Action</strong>:
+              platform detection + <code>try/except ImportError</code>, OS-specific print paths, and friendly fallback messages.
+            </li>
+            <li><strong>Result</strong>: The app runs everywhere; optional integrations activate only when supported.</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2>GitHub Pages submission</h2>
+      <div class="grid">
+        <div class="card">
+          <p>
+            Enable GitHub Pages and submit the generated site URL.
+            Template: <code>https://&lt;github-username&gt;.github.io/&lt;repo-name&gt;/</code>
+          </p>
+          <div class="note">
+            <strong>Setup:</strong> Repo Settings → Pages → “Deploy from a branch” → Branch:
+            <code>main</code> → Folder: <code>/docs</code> → Save.
+          </div>
+        </div>
+      </div>
+
+      <h2>2–5 minute demo script</h2>
+      <div class="grid">
+        <div class="card">
+          <ul>
+            <li><strong>0:00–0:20</strong>: Introduce Notexio, tech stack, and goals (safety + UX + cross-platform).</li>
+            <li><strong>0:20–1:10</strong>: Create file → type → show <code>*</code> modified indicator → save.</li>
+            <li><strong>1:10–1:50</strong>: Attempt close with unsaved changes → show prompt; mention recovery snapshots.</li>
+            <li><strong>1:50–2:40</strong>: Find/Replace or Go To Line; toggle line numbers; show Open Recent updates.</li>
+            <li><strong>2:40–3:10</strong>: Wrap up: modular managers + graceful optional deps + data-loss prevention.</li>
+          </ul>
+          <p class="note">
+            Tip: In the wrap-up, call out “why” choices (e.g., guarded updates, graceful degradation, bounded recovery).
+          </p>
+        </div>
+      </div>
+
+      <footer>
+        Built for submission: STAR report + GitHub Pages + demo script. Source lives in the repository root.
+      </footer>
+    </div>
+  </body>
+</html>
+

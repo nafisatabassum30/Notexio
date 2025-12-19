@@ -92,6 +92,17 @@ Run the application:
 python main.py
 ```
 
+## GitHub Pages (submission link)
+
+This repo includes a ready-to-publish GitHub Pages site in `docs/` (STAR report + demo script).
+
+- **Pages URL template**: `https://<github-username>.github.io/<repo-name>/`
+- **Setup**:
+  - Go to **Repo Settings → Pages**
+  - Under **Build and deployment**, select **Deploy from a branch**
+  - Choose **Branch: `main`** and **Folder: `/docs`**
+  - Save and wait for the site to deploy
+
 ## Keyboard Shortcuts
 
 - **Ctrl+N**: New File
