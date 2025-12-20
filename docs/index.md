@@ -8,8 +8,8 @@ Notexio is a lightweight text editor built with **Python** and **Tkinter**, crea
 - **Demo video (2–5 min)**: _<paste your YouTube/Drive link here>_
 
 ## Report (PDF)
-- **Project Report (PDF)**: [`report/Notexio_CSE323_Project_Report.pdf`](../report/Notexio_CSE323_Project_Report.pdf)
-- **Report source (Markdown)**: [`report/Notexio_CSE323_Project_Report.md`](../report/Notexio_CSE323_Project_Report.md)
+- **Project Report (PDF)**: [`report/Notexio_CSE323_Project_Report.pdf`](report/Notexio_CSE323_Project_Report.pdf)
+- **Report source (Markdown)**: [`report/Notexio_CSE323_Project_Report.md`](report/Notexio_CSE323_Project_Report.md)
 
 ## How to enable GitHub Pages (quick)
 1. In GitHub: **Settings → Pages**
