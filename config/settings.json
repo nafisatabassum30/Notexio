@@ -1,10 +1,11 @@
 {
-    "theme": "light",
+    "theme": "custom",
     "recent_files": [
-        "C:/Users/DELL/Downloads/note.txt"
+        "C:/Users/DELL/Downloads/note.txt",
+        "C:/Users/DELL/Downloads/grade.txt"
     ],
-    "window_width": 845,
-    "window_height": 600,
+    "window_width": 846,
+    "window_height": 651,
     "font_family": "Consolas",
     "font_size": 11,
     "word_wrap": true,

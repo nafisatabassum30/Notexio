@@ -124,9 +124,9 @@ class UIComponents:
         self.status_bar.pack(side=tk.BOTTOM, fill=tk.X, padx=0, pady=0)
         self.status_bar.pack_propagate(False)
         
-        # Subtle top border
-        border = tk.Frame(self.status_bar, height=1, bg="#D0D0D0")
-        border.pack(side=tk.TOP, fill=tk.X)
+        # Top border - will be themed
+        self.status_border = tk.Frame(self.status_bar, height=1, bg="#D0D0D0")
+        self.status_border.pack(side=tk.TOP, fill=tk.X)
         
         # Content frame
         content_frame = tk.Frame(self.status_bar, bg="#F0F0F0")
@@ -145,11 +145,79 @@ class UIComponents:
         )
         self.status_text.pack(side=tk.LEFT)
         
-        # Right side - position and stats
+        # Right side - position and stats (like modern Notepad)
         right_frame = tk.Frame(content_frame, bg="#F0F0F0")
         right_frame.pack(side=tk.RIGHT)
         
-        # Word count
+        # Encoding (like Notepad) - UTF-8
+        self.encoding_label = tk.Label(
+            right_frame,
+            text="UTF-8",
+            anchor=tk.E,
+            padx=8,
+            pady=2,
+            bg="#F0F0F0",
+            fg="#000000",
+            font=("Segoe UI", 9)
+        )
+        self.encoding_label.pack(side=tk.RIGHT)
+        
+        # Separator
+        sep3 = tk.Frame(right_frame, width=1, bg="#D0D0D0", height=14)
+        sep3.pack(side=tk.RIGHT, padx=4, pady=4, fill=tk.Y)
+        
+        # Line endings (like Notepad) - Windows (CRLF)
+        self.line_ending_label = tk.Label(
+            right_frame,
+            text="Windows (CRLF)",
+            anchor=tk.E,
+            padx=8,
+            pady=2,
+            bg="#F0F0F0",
+            fg="#000000",
+            font=("Segoe UI", 9)
+        )
+        self.line_ending_label.pack(side=tk.RIGHT)
+        
+        # Separator
+        sep2 = tk.Frame(right_frame, width=1, bg="#D0D0D0", height=14)
+        sep2.pack(side=tk.RIGHT, padx=4, pady=4, fill=tk.Y)
+        
+        # Zoom level (like Notepad)
+        self.zoom_label = tk.Label(
+            right_frame,
+            text="100%",
+            anchor=tk.E,
+            padx=8,
+            pady=2,
+            bg="#F0F0F0",
+            fg="#000000",
+            font=("Segoe UI", 9)
+        )
+        self.zoom_label.pack(side=tk.RIGHT)
+        
+        # Separator
+        sep1 = tk.Frame(right_frame, width=1, bg="#D0D0D0", height=14)
+        sep1.pack(side=tk.RIGHT, padx=4, pady=4, fill=tk.Y)
+        
+        # File type (like Notepad)
+        self.file_type_label = tk.Label(
+            right_frame,
+            text="Plain text",
+            anchor=tk.E,
+            padx=8,
+            pady=2,
+            bg="#F0F0F0",
+            fg="#000000",
+            font=("Segoe UI", 9)
+        )
+        self.file_type_label.pack(side=tk.RIGHT)
+        
+        # Separator
+        sep0 = tk.Frame(right_frame, width=1, bg="#D0D0D0", height=14)
+        sep0.pack(side=tk.RIGHT, padx=4, pady=4, fill=tk.Y)
+        
+        # Character count
         self.word_count_label = tk.Label(
             right_frame,
             text="0 characters",
@@ -162,9 +230,9 @@ class UIComponents:
         )
         self.word_count_label.pack(side=tk.RIGHT)
         
-        # Separator
-        sep = tk.Frame(right_frame, width=1, bg="#D0D0D0", height=14)
-        sep.pack(side=tk.RIGHT, padx=4, pady=4, fill=tk.Y)
+        # Separator - will be themed
+        self.status_sep = tk.Frame(right_frame, width=1, bg="#D0D0D0", height=14)
+        self.status_sep.pack(side=tk.RIGHT, padx=4, pady=4, fill=tk.Y)
         
         # Line/Column info - Windows Notepad style
         self.position_label = tk.Label(
@@ -319,14 +387,18 @@ class UIComponents:
             )
             self.line_numbers.pack(side=tk.LEFT, fill=tk.Y)
             
-            # Bind scroll event
+            # Mouse wheel is handled in editor.py, just sync line numbers on scroll
             def on_scroll(event):
                 self.on_text_scroll(event)
-                return "break"
                 
-            self.editor.text_widget.bind("<MouseWheel>", on_scroll)
-            self.editor.text_widget.bind("<Button-4>", on_scroll)
-            self.editor.text_widget.bind("<Button-5>", on_scroll)
+            # Bind to text widget's scrollbar
+            try:
+                scrollbar = self.editor.text_widget.cget("yscrollcommand")
+                if scrollbar:
+                    # The scrollbar will trigger updates
+                    pass
+            except:
+                pass
             
             # Bind text changes
             self.editor.text_widget.bind("<<Modified>>", lambda e: self.update_line_numbers())

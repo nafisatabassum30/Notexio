@@ -27,16 +27,17 @@ class ThemeManager:
                 "border": "#E5E5E5"
             },
             "dark": {
-                "bg": "#1E1E1E",
-                "fg": "#D4D4D4",
-                "select_bg": "#0078D4",
+                "bg": "#202020",  # Modern Notepad dark background
+                "fg": "#D4D4D4",  # Light text
+                "select_bg": "#0078D4",  # Windows blue selection
                 "select_fg": "#FFFFFF",
                 "insert_bg": "#D4D4D4",
-                "menu_bg": "#252526",
+                "menu_bg": "#2D2D30",  # Dark menu bar
                 "menu_fg": "#CCCCCC",
-                "toolbar_bg": "#2D2D30",
-                "status_bg": "#007ACC",
-                "border": "#3E3E42"
+                "toolbar_bg": "#2D2D30",  # Dark toolbar
+                "status_bg": "#007ACC",  # Blue status bar like Notepad
+                "border": "#3E3E42",
+                "status_fg": "#FFFFFF"  # White text on status bar
             }
         }
         
@@ -66,30 +67,59 @@ class ThemeManager:
         # Apply to root window
         self.editor.root.config(bg=theme["bg"])
         
-        # Apply to UI components if available
+        # Apply to UI components if available - modern Notepad style
         if hasattr(self.editor, 'ui_components') and self.editor.ui_components:
             if hasattr(self.editor.ui_components, 'toolbar_frame') and self.editor.ui_components.toolbar_frame:
-                self.editor.ui_components.toolbar_frame.config(bg=theme.get("toolbar_bg", theme["menu_bg"]))
+                toolbar_bg = theme.get("toolbar_bg", theme["menu_bg"])
+                toolbar_fg = theme.get("menu_fg", theme["fg"])
+                    
+                self.editor.ui_components.toolbar_frame.config(bg=toolbar_bg)
                 # Update toolbar buttons
                 for widget in self.editor.ui_components.toolbar_frame.winfo_children():
                     if isinstance(widget, tk.Frame):
+                        widget.config(bg=toolbar_bg)
                         for btn in widget.winfo_children():
                             if isinstance(btn, tk.Button):
                                 if theme_name == "dark":
-                                    btn.config(bg="#3E3E42", fg="#CCCCCC", activebackground="#505050")
+                                    btn.config(bg="#3E3E42", fg="#CCCCCC", activebackground="#505050", activeforeground="#FFFFFF")
                                 else:
-                                    btn.config(bg="#FFFFFF", fg="#333333", activebackground="#E8E8E8")
+                                    btn.config(bg="#FAFAFA", fg="#000000", activebackground="#E8E8E8", activeforeground="#000000")
                                     
             if hasattr(self.editor.ui_components, 'status_bar') and self.editor.ui_components.status_bar:
                 status_bg = theme.get("status_bg", theme["menu_bg"])
+                status_fg = theme.get("status_fg", theme.get("menu_fg", theme["fg"]))
+                    
                 self.editor.ui_components.status_bar.config(bg=status_bg)
-                # Update status bar labels
+                # Update status bar border
+                if hasattr(self.editor.ui_components, 'status_border'):
+                    if theme_name == "dark":
+                        self.editor.ui_components.status_border.config(bg="#4A9EFF")
+                    else:
+                        self.editor.ui_components.status_border.config(bg="#D0D0D0")
+                        
+                # Update all status bar labels directly
+                status_labels = [
+                    'status_text', 'position_label', 'word_count_label', 
+                    'file_type_label', 'zoom_label', 'line_ending_label', 'encoding_label'
+                ]
+                for label_name in status_labels:
+                    if hasattr(self.editor.ui_components, label_name):
+                        label = getattr(self.editor.ui_components, label_name)
+                        if label:
+                            label.config(bg=status_bg, fg=status_fg)
+                        
+                # Update status bar labels and separators in frames
                 for widget in self.editor.ui_components.status_bar.winfo_children():
                     if isinstance(widget, tk.Frame):
                         widget.config(bg=status_bg)
-                        for label in widget.winfo_children():
-                            if isinstance(label, tk.Label):
-                                label.config(bg=status_bg, fg=theme["menu_fg"])
+                        for child in widget.winfo_children():
+                            if isinstance(child, tk.Label):
+                                child.config(bg=status_bg, fg=status_fg)
+                            elif isinstance(child, tk.Frame):  # Separator
+                                if theme_name == "dark":
+                                    child.config(bg="#4A9EFF")  # Lighter blue for separator
+                                else:
+                                    child.config(bg="#D0D0D0")
         
         # Store theme preference
         self.settings_manager.save_theme(theme_name)
@@ -121,43 +151,60 @@ class ThemeManager:
         
         dialog = tk.Toplevel(self.editor.root)
         dialog.title("Customize Theme")
-        dialog.geometry("400x300")
+        dialog.geometry("400x250")
         dialog.transient(self.editor.root)
+        dialog.configure(bg="#FAFAFA")
         
-        # Background color
-        tk.Label(dialog, text="Background Color:").pack(pady=5)
-        bg_button = tk.Button(dialog, text="Choose", command=lambda: self.choose_color("bg", dialog))
-        bg_button.pack(pady=5)
-        
-        # Foreground color
-        tk.Label(dialog, text="Text Color:").pack(pady=5)
-        fg_button = tk.Button(dialog, text="Choose", command=lambda: self.choose_color("fg", dialog))
-        fg_button.pack(pady=5)
-        
-        # Apply button
-        tk.Button(dialog, text="Apply", command=lambda: self.apply_custom_from_dialog(dialog)).pack(pady=20)
-        
-        self.custom_dialog = dialog
+        # Initialize color variables
         self.custom_bg = None
         self.custom_fg = None
         
-    def choose_color(self, color_type, dialog):
-        """Choose a color for custom theme."""
-        color = colorchooser.askcolor(title=f"Choose {color_type.upper()} Color", parent=dialog)
-        if color[1]:
-            if color_type == "bg":
+        # Background color section
+        bg_frame = tk.Frame(dialog, bg="#FAFAFA")
+        bg_frame.pack(pady=15, padx=20, fill=tk.X)
+        tk.Label(bg_frame, text="Background Color:", bg="#FAFAFA", font=("Segoe UI", 9)).pack(side=tk.LEFT)
+        bg_preview = tk.Label(bg_frame, text="  ", bg="#FFFFFF", relief=tk.SUNKEN, width=5)
+        bg_preview.pack(side=tk.LEFT, padx=10)
+        
+        def choose_bg():
+            color = colorchooser.askcolor(title="Choose Background Color", parent=dialog)
+            if color[1]:
                 self.custom_bg = color[1]
-            else:
-                self.custom_fg = color[1]
+                bg_preview.config(bg=color[1])
                 
-    def apply_custom_from_dialog(self, dialog):
-        """Apply custom theme from dialog."""
-        if self.custom_bg and self.custom_fg:
-            self.set_custom_theme(self.custom_bg, self.custom_fg)
-            dialog.destroy()
-        else:
-            from tkinter import messagebox
-            messagebox.showwarning("Warning", "Please select both background and text colors.")
+        bg_button = tk.Button(bg_frame, text="Choose", command=choose_bg, width=10)
+        bg_button.pack(side=tk.LEFT, padx=5)
+        
+        # Text color section
+        fg_frame = tk.Frame(dialog, bg="#FAFAFA")
+        fg_frame.pack(pady=15, padx=20, fill=tk.X)
+        tk.Label(fg_frame, text="Text Color:", bg="#FAFAFA", font=("Segoe UI", 9)).pack(side=tk.LEFT)
+        fg_preview = tk.Label(fg_frame, text="  ", bg="#000000", relief=tk.SUNKEN, width=5)
+        fg_preview.pack(side=tk.LEFT, padx=10)
+        
+        def choose_fg():
+            color = colorchooser.askcolor(title="Choose Text Color", parent=dialog)
+            if color[1]:
+                self.custom_fg = color[1]
+                fg_preview.config(bg=color[1])
+                
+        fg_button = tk.Button(fg_frame, text="Choose", command=choose_fg, width=10)
+        fg_button.pack(side=tk.LEFT, padx=5)
+        
+        # Button frame
+        button_frame = tk.Frame(dialog, bg="#FAFAFA")
+        button_frame.pack(pady=20)
+        
+        def apply_theme():
+            if self.custom_bg and self.custom_fg:
+                self.set_custom_theme(self.custom_bg, self.custom_fg)
+                dialog.destroy()
+            else:
+                from tkinter import messagebox
+                messagebox.showwarning("Warning", "Please select both background and text colors.")
+                
+        tk.Button(button_frame, text="Apply", command=apply_theme, width=12, height=1).pack(side=tk.LEFT, padx=5)
+        tk.Button(button_frame, text="Cancel", command=dialog.destroy, width=12, height=1).pack(side=tk.LEFT, padx=5)
             
     def load_theme(self):
         """Load theme from settings."""

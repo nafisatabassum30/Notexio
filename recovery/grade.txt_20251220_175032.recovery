@@ -1,0 +1,38 @@
+.global _start
+
+.data
+score: .word 72       @ Change this to test different scores
+
+.text
+_start:
+    LDR R0, =score    @ Load address of score
+    LDR R0, [R0]      @ Load score into R0
+
+    CMP R0, #80
+    BGE grade_A       @ If score >= 80
+
+    CMP R0, #60
+    BGE grade_B       @ If 60 <= score < 80
+
+    CMP R0, #40
+    BGE grade_C       @ If 40 <= score < 60
+
+    B grade_F         @ Else, score < 40
+
+grade_A:
+    MOV R1, #1        @ Grade A
+    B done
+
+grade_B:
+    MOV R1, #2        @ Grade B
+    B done
+
+grade_C:
+    MOV R1, #3        @ Grade C
+    B done
+
+grade_F:
+    MOV R1, #4        @ Grade F
+
+done:
+    @ End of program

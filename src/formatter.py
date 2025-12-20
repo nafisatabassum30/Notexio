@@ -29,6 +29,10 @@ class Formatter:
         
     def update_font(self):
         """Update the font configuration."""
+        # Check if text_widget exists (may not be initialized yet)
+        if not hasattr(self.editor, 'text_widget') or not self.editor.text_widget:
+            return
+            
         font_config = (
             self.current_font_family,
             self.current_font_size,
@@ -43,6 +47,10 @@ class Formatter:
             background=self.current_bg_color,
             insertbackground=self.current_text_color
         )
+        
+        # Update base font size in view manager for zoom
+        if hasattr(self.editor, 'view_manager') and self.editor.view_manager:
+            self.editor.view_manager.base_font_size = self.current_font_size
         
     def change_font_family(self):
         """Change font family."""
@@ -155,9 +163,27 @@ class Formatter:
     def toggle_underline(self):
         """Toggle underline formatting."""
         self.current_font_underline = not self.current_font_underline
-        # Note: Tkinter Text widget doesn't support underline directly
-        # This would require tag-based implementation for selected text
-        # For now, we'll just track the state
+        # Apply underline to selected text using tags
+        try:
+            sel_start = self.editor.text_widget.index(tk.SEL_FIRST)
+            sel_end = self.editor.text_widget.index(tk.SEL_LAST)
+            
+            # Create or configure underline tag
+            if self.current_font_underline:
+                self.editor.text_widget.tag_configure(
+                    "underline",
+                    underline=True
+                )
+                self.editor.text_widget.tag_add("underline", sel_start, sel_end)
+            else:
+                self.editor.text_widget.tag_remove("underline", sel_start, sel_end)
+        except tk.TclError:
+            # No selection - apply to all text
+            if self.current_font_underline:
+                self.editor.text_widget.tag_configure("underline", underline=True)
+                self.editor.text_widget.tag_add("underline", "1.0", tk.END)
+            else:
+                self.editor.text_widget.tag_remove("underline", "1.0", tk.END)
         
     def apply_formatting_to_selection(self, tag_name="formatted"):
         """Apply formatting to selected text using tags."""
@@ -188,6 +214,12 @@ class Formatter:
             
     def restore_default_formatting(self):
         """Restore default formatting."""
+        # Remove all formatting tags first
+        self.editor.text_widget.tag_delete("underline")
+        self.editor.text_widget.tag_delete("bold")
+        self.editor.text_widget.tag_delete("italic")
+        
+        # Reset formatting variables
         self.current_font_family = self.default_font_family
         self.current_font_size = self.default_font_size
         self.current_text_color = self.default_text_color

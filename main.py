@@ -46,6 +46,9 @@ class NotexioApp:
         self.edit_operations = EditOperations(self.editor)
         self.formatter = Formatter(self.editor)
         self.view_manager = ViewManager(self.editor)
+        # Set references for cross-module communication
+        self.editor.view_manager = self.view_manager
+        self.editor.formatter = self.formatter
         self.tools = Tools(self.editor)
         self.theme_manager = ThemeManager(self.editor, self.settings_manager)
         self.safety_features = SafetyFeatures(self.editor, self.file_manager)
@@ -76,6 +79,29 @@ class NotexioApp:
         
         # Bind keyboard shortcuts
         self.bind_shortcuts()
+        
+        # Bind mouse wheel to entire window
+        self.root.bind_all("<MouseWheel>", self.on_window_mousewheel)
+        self.root.bind_all("<Button-4>", self.on_window_mousewheel)
+        self.root.bind_all("<Button-5>", self.on_window_mousewheel)
+        
+    def on_window_mousewheel(self, event):
+        """Handle mouse wheel on entire window."""
+        # Focus on text widget if mouse is over it
+        widget = event.widget
+        if hasattr(widget, 'winfo_class'):
+            if widget.winfo_class() == 'Text' or 'text' in str(widget).lower():
+                # Let the text widget handle it
+                return
+        # Otherwise, scroll the text widget
+        if hasattr(self.editor, 'text_widget'):
+            if hasattr(event, 'delta') and event.delta:
+                self.editor.text_widget.yview_scroll(int(-1 * (event.delta / 120)), "units")
+            elif hasattr(event, 'num'):
+                if event.num == 4:
+                    self.editor.text_widget.yview_scroll(-1, "units")
+                elif event.num == 5:
+                    self.editor.text_widget.yview_scroll(1, "units")
         
     def setup_menu(self):
         """Setup Windows Notepad-style menu bar."""

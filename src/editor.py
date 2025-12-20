@@ -9,10 +9,82 @@ import os
 class Editor:
     """Main editor window class."""
     
+    def set_icon(self):
+        """Set the application icon."""
+        import os
+        
+        # Get project root directory (parent of src directory)
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        icon_paths = [
+            os.path.join(project_root, "icon.ico"),  # Project root
+            "icon.ico",  # Current directory
+            os.path.join(project_root, "assets", "icon.ico"),  # Assets folder
+            "assets/icon.ico"  # Relative assets
+        ]
+        
+        for icon_path in icon_paths:
+            if os.path.exists(icon_path):
+                try:
+                    self.root.iconbitmap(icon_path)
+                    return
+                except Exception:
+                    continue
+        
+        # If no icon file found, try to create a simple one or use default
+        try:
+            # Try to create a simple icon programmatically
+            self.create_simple_icon()
+        except:
+            pass  # Use default icon if creation fails
+            
+    def create_simple_icon(self):
+        """Create a simple icon if PIL is available."""
+        try:
+            from PIL import Image, ImageDraw
+            import os
+            
+            # Create icon directory if needed
+            os.makedirs("assets", exist_ok=True)
+            
+            # Create a 256x256 icon
+            size = 256
+            img = Image.new('RGBA', (size, size), (0, 0, 0, 0))
+            draw = ImageDraw.Draw(img)
+            
+            # Modern blue background circle
+            draw.ellipse([20, 20, size-20, size-20], fill=(0, 120, 212, 255))  # Windows blue
+            
+            # Draw a stylized "N" for Notexio
+            # Left vertical line
+            draw.rectangle([80, 60, 100, size-60], fill=(255, 255, 255, 255))
+            # Diagonal line
+            points = [(100, 60), (size-100, size-60), (size-80, size-60), (80, 60)]
+            draw.polygon(points, fill=(255, 255, 255, 255))
+            # Right vertical line
+            draw.rectangle([size-100, 60, size-80, size-60], fill=(255, 255, 255, 255))
+            
+            # Save as ICO with multiple sizes
+            project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            icon_path = os.path.join(project_root, "icon.ico")
+            img.save(icon_path, format='ICO', sizes=[(256, 256), (128, 128), (64, 64), (32, 32), (16, 16)])
+            
+            # Set the icon
+            self.root.iconbitmap(icon_path)
+        except ImportError:
+            # PIL not available, skip icon creation
+            pass
+        except Exception:
+            # Silently fail
+            pass
+            
     def __init__(self, root):
         self.root = root
         self.root.title("Notexio - Untitled")
         self.root.geometry("900x650")
+        
+        # Set application icon
+        self.set_icon()
+        
         # Modern Windows 11 Notepad style - clean white background
         self.root.configure(bg="#FFFFFF")
         # Remove window border for cleaner look (optional)
@@ -65,6 +137,24 @@ class Editor:
         
         # Track modifications
         self.text_widget.bind("<<Modified>>", self.on_text_modified)
+        
+        # Enable mouse wheel scrolling
+        self.text_widget.bind("<MouseWheel>", self.on_mousewheel)
+        self.text_widget.bind("<Button-4>", self.on_mousewheel)  # Linux
+        self.text_widget.bind("<Button-5>", self.on_mousewheel)  # Linux
+        
+    def on_mousewheel(self, event):
+        """Handle mouse wheel scrolling."""
+        # Windows and Mac
+        if hasattr(event, 'delta') and event.delta:
+            self.text_widget.yview_scroll(int(-1 * (event.delta / 120)), "units")
+        # Linux
+        elif hasattr(event, 'num'):
+            if event.num == 4:
+                self.text_widget.yview_scroll(-1, "units")
+            elif event.num == 5:
+                self.text_widget.yview_scroll(1, "units")
+        return "break"
         
     def on_text_modified(self, event=None):
         """Handle text modification events."""
