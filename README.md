@@ -150,6 +150,12 @@ Settings are stored in `config/settings.json` and include:
 - Font settings
 - View preferences
 
+## Project Report
+
+For a detailed report on the project's development, challenges, and technical implementation, please refer to:
+- [Project Report (PDF)](Notexio_Project_Report.pdf)
+- [Project Report (Markdown)](PROJECT_REPORT.md)
+
 ## License
 
 This project is created for educational purposes.
