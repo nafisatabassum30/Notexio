@@ -51,7 +51,13 @@ class SafetyFeatures:
         while self.auto_save_running and self.auto_save_enabled:
             time.sleep(self.auto_save_interval)
             if self.auto_save_running and self.editor.is_modified:
-                self.create_recovery_file()
+                # Tkinter widgets must only be accessed from the main/UI thread.
+                # Schedule the recovery snapshot safely on the Tk event loop.
+                try:
+                    self.editor.root.after(0, self.create_recovery_file)
+                except Exception:
+                    # If the UI is already shutting down, silently stop.
+                    self.auto_save_running = False
                 
     def create_recovery_file(self):
         """Create a recovery file."""

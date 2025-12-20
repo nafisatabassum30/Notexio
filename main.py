@@ -312,6 +312,26 @@ class NotexioApp:
         width = self.settings_manager.get_setting("window_width", 800)
         height = self.settings_manager.get_setting("window_height", 600)
         self.root.geometry(f"{width}x{height}")
+
+        # Load view preferences
+        desired_word_wrap = bool(self.settings_manager.get_setting("word_wrap", True))
+        if desired_word_wrap != self.view_manager.word_wrap:
+            self.view_manager.toggle_word_wrap()
+
+        desired_line_numbers = bool(self.settings_manager.get_setting("line_numbers", False))
+        if desired_line_numbers != self.ui_components.line_numbers_visible:
+            # Uses UIComponents implementation (also updates view_manager via toggle_line_numbers)
+            self.toggle_line_numbers()
+
+        # Load safety preferences
+        auto_save = bool(self.settings_manager.get_setting("auto_save", False))
+        interval = int(self.settings_manager.get_setting("auto_save_interval", 300))
+        if auto_save:
+            # Guard lower bound to avoid hot-looping if settings are corrupted
+            interval = max(10, interval)
+            self.safety_features.enable_auto_save(interval=interval)
+        else:
+            self.safety_features.disable_auto_save()
         
     def check_recovery_files(self):
         """Check for recovery files on startup."""
