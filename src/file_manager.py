@@ -21,6 +21,11 @@ class FileManager:
         if self.check_unsaved_changes():
             self.editor.current_file = None
             self.editor.text_widget.delete(1.0, tk.END)
+            # Clear Tk's modified flag so we don't instantly re-mark as dirty.
+            try:
+                self.editor.text_widget.edit_modified(False)
+            except Exception:
+                pass
             self.editor.is_modified = False
             self.editor.update_title()
             # Update status bar if available
@@ -48,6 +53,11 @@ class FileManager:
                     self.editor.text_widget.delete(1.0, tk.END)
                     self.editor.text_widget.insert(1.0, content)
                     self.editor.current_file = filepath
+                    # Reset Tk modified flag after programmatic insert
+                    try:
+                        self.editor.text_widget.edit_modified(False)
+                    except Exception:
+                        pass
                     self.editor.is_modified = False
                     self.editor.update_title()
                     self.add_to_recent_files(filepath)
@@ -66,6 +76,11 @@ class FileManager:
                 with open(self.editor.current_file, 'w', encoding='utf-8') as f:
                     content = self.editor.text_widget.get(1.0, tk.END + "-1c")
                     f.write(content)
+                # Clear Tk modified flag after saving
+                try:
+                    self.editor.text_widget.edit_modified(False)
+                except Exception:
+                    pass
                 self.editor.is_modified = False
                 self.editor.update_title()
                 return True
@@ -92,6 +107,11 @@ class FileManager:
                     content = self.editor.text_widget.get(1.0, tk.END + "-1c")
                     f.write(content)
                 self.editor.current_file = filepath
+                # Clear Tk modified flag after saving
+                try:
+                    self.editor.text_widget.edit_modified(False)
+                except Exception:
+                    pass
                 self.editor.is_modified = False
                 self.editor.update_title()
                 self.add_to_recent_files(filepath)

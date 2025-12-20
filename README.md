@@ -157,3 +157,8 @@ This project is created for educational purposes.
 ## Version
 
 Version 1.0.0
+
+## CSE323 Submission Report
+- **PDF report**: `docs/Notexio_CSE323_Project_Report.pdf`
+- **Editable source**: `docs/Notexio_CSE323_Project_Report.md`
+

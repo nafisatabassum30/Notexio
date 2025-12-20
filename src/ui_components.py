@@ -259,7 +259,12 @@ class UIComponents:
         line, col = cursor_pos.split('.')
         
         # Update position label - Windows Notepad format
-        self.position_label.config(text=f"Ln {line}, Col {col}")
+        # Tk's column is 0-based; Notepad-style UI is 1-based.
+        try:
+            col_display = int(col) + 1
+        except Exception:
+            col_display = col
+        self.position_label.config(text=f"Ln {line}, Col {col_display}")
         
         # Update character count - Windows Notepad style
         content = self.editor.text_widget.get(1.0, tk.END + "-1c")
