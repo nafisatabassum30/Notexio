@@ -312,6 +312,15 @@ class NotexioApp:
         width = self.settings_manager.get_setting("window_width", 800)
         height = self.settings_manager.get_setting("window_height", 600)
         self.root.geometry(f"{width}x{height}")
+
+        # Load auto-save preference
+        if self.settings_manager.get_setting("auto_save", False):
+            interval = self.settings_manager.get_setting("auto_save_interval", 300)
+            try:
+                self.safety_features.enable_auto_save(interval=interval)
+            except Exception:
+                # Auto-save is a convenience feature; don't block startup
+                pass
         
     def check_recovery_files(self):
         """Check for recovery files on startup."""
@@ -367,6 +376,12 @@ class NotexioApp:
     def on_closing(self):
         """Handle application closing."""
         if self.safety_features.warn_on_exit():
+            # Stop auto-save scheduling
+            try:
+                self.safety_features.disable_auto_save()
+            except Exception:
+                pass
+
             # Save window size
             self.settings_manager.set_setting("window_width", self.root.winfo_width())
             self.settings_manager.set_setting("window_height", self.root.winfo_height())

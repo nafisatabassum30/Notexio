@@ -401,8 +401,6 @@ class UIComponents:
                 pass
             
             # Bind text changes
-            self.editor.text_widget.bind("<<Modified>>", lambda e: self.update_line_numbers())
-            
             # Update line numbers
             self.update_line_numbers()
             

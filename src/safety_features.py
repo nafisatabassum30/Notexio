@@ -3,8 +3,6 @@ Safety features for Notexio text editor.
 """
 import tkinter as tk
 import os
-import threading
-import time
 from datetime import datetime
 
 
@@ -17,8 +15,7 @@ class SafetyFeatures:
         self.recovery_dir = recovery_dir
         self.auto_save_enabled = False
         self.auto_save_interval = 300  # 5 minutes in seconds
-        self.auto_save_thread = None
-        self.auto_save_running = False
+        self._auto_save_after_id = None
         
         # Create recovery directory if it doesn't exist
         if not os.path.exists(self.recovery_dir):
@@ -27,7 +24,7 @@ class SafetyFeatures:
     def enable_auto_save(self, interval=300):
         """Enable auto-save feature."""
         self.auto_save_enabled = True
-        self.auto_save_interval = interval
+        self.auto_save_interval = int(interval)
         self.start_auto_save()
         
     def disable_auto_save(self):
@@ -36,22 +33,36 @@ class SafetyFeatures:
         self.stop_auto_save()
         
     def start_auto_save(self):
-        """Start auto-save thread."""
-        if not self.auto_save_running and self.auto_save_enabled:
-            self.auto_save_running = True
-            self.auto_save_thread = threading.Thread(target=self._auto_save_loop, daemon=True)
-            self.auto_save_thread.start()
+        """Start auto-save scheduling (Tk main thread)."""
+        if not self.auto_save_enabled:
+            return
+        if self._auto_save_after_id is None:
+            self._schedule_next_auto_save()
             
     def stop_auto_save(self):
-        """Stop auto-save thread."""
-        self.auto_save_running = False
-        
-    def _auto_save_loop(self):
-        """Auto-save loop running in background thread."""
-        while self.auto_save_running and self.auto_save_enabled:
-            time.sleep(self.auto_save_interval)
-            if self.auto_save_running and self.editor.is_modified:
-                self.create_recovery_file()
+        """Stop auto-save scheduling."""
+        if self._auto_save_after_id is not None:
+            try:
+                self.editor.root.after_cancel(self._auto_save_after_id)
+            except Exception:
+                pass
+            finally:
+                self._auto_save_after_id = None
+
+    def _schedule_next_auto_save(self):
+        """Schedule the next auto-save tick on Tk event loop."""
+        if not self.auto_save_enabled:
+            return
+        interval_ms = max(1, int(self.auto_save_interval * 1000))
+        self._auto_save_after_id = self.editor.root.after(interval_ms, self._auto_save_tick)
+
+    def _auto_save_tick(self):
+        """One auto-save tick (runs in Tk main thread)."""
+        # Clear id first so stop_auto_save can cancel cleanly.
+        self._auto_save_after_id = None
+        if self.auto_save_enabled and self.editor.is_modified:
+            self.create_recovery_file()
+        self._schedule_next_auto_save()
                 
     def create_recovery_file(self):
         """Create a recovery file."""

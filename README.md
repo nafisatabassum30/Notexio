@@ -92,6 +92,12 @@ Run the application:
 python main.py
 ```
 
+## Course Submission (CSE323)
+
+- **Project report (Markdown):** `docs/Notexio_CSE323_Project_Report.md`
+- **Project report (PDF):** `docs/Notexio_CSE323_Project_Report.pdf`
+- **GitHub Pages landing page:** `docs/index.md` (enable Pages from `/docs`)
+
 ## Keyboard Shortcuts
 
 - **Ctrl+N**: New File

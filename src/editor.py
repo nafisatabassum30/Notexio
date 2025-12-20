@@ -154,6 +154,12 @@ class Editor:
                 self.text_widget.yview_scroll(-1, "units")
             elif event.num == 5:
                 self.text_widget.yview_scroll(1, "units")
+        # Sync line numbers (if enabled)
+        if self.ui_components and getattr(self.ui_components, "line_numbers_visible", False):
+            try:
+                self.ui_components.update_line_numbers()
+            except Exception:
+                pass
         return "break"
         
     def on_text_modified(self, event=None):
