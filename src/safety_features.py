@@ -51,36 +51,65 @@ class SafetyFeatures:
         while self.auto_save_running and self.auto_save_enabled:
             time.sleep(self.auto_save_interval)
             if self.auto_save_running and self.editor.is_modified:
-                self.create_recovery_file()
+                # Tkinter widgets are not thread-safe; schedule snapshot on UI thread.
+                self.request_recovery_file()
                 
-    def create_recovery_file(self):
-        """Create a recovery file."""
+    def request_recovery_file(self):
+        """Request a recovery file write from any thread (thread-safe)."""
         try:
-            content = self.editor.text_widget.get(1.0, tk.END + "-1c")
+            # Snapshot must happen on the Tkinter (UI) thread.
+            self.editor.root.after(0, self._snapshot_and_write_recovery_file_async)
+        except Exception:
+            # If the root is already destroyed/shutting down, ignore.
+            pass
             
+    def _snapshot_and_write_recovery_file_async(self):
+        """Snapshot editor content on UI thread, then write in background."""
+        try:
+            if not getattr(self.editor, "is_modified", False):
+                return
+            content = self.editor.text_widget.get(1.0, tk.END + "-1c")
+            current_file = getattr(self.editor, "current_file", None)
             if not content.strip():
                 return
-                
-            # Generate recovery filename
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            if self.editor.current_file:
-                filename = os.path.basename(self.editor.current_file)
-                recovery_filename = f"{filename}_{timestamp}.recovery"
-            else:
-                recovery_filename = f"untitled_{timestamp}.recovery"
-                
-            recovery_path = os.path.join(self.recovery_dir, recovery_filename)
+            threading.Thread(
+                target=self._write_recovery_file,
+                args=(content, current_file),
+                daemon=True
+            ).start()
+        except Exception as e:
+            print(f"Error snapshotting recovery content: {e}")
             
-            # Save recovery file
-            with open(recovery_path, 'w', encoding='utf-8') as f:
-                f.write(content)
-                
-            # Keep only last 10 recovery files
-            self.cleanup_old_recovery_files()
-            
+    def create_recovery_file(self):
+        """Create a recovery file (synchronous; call from UI thread)."""
+        try:
+            content = self.editor.text_widget.get(1.0, tk.END + "-1c")
+            current_file = getattr(self.editor, "current_file", None)
+            if not content.strip():
+                return
+            self._write_recovery_file(content, current_file)
         except Exception as e:
             print(f"Error creating recovery file: {e}")
             
+    def _write_recovery_file(self, content, current_file):
+        """Write a recovery file to disk (no Tkinter calls)."""
+        # Generate recovery filename (include milliseconds to avoid collisions)
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:-3]
+        if current_file:
+            filename = os.path.basename(current_file)
+            recovery_filename = f"{filename}_{timestamp}.recovery"
+        else:
+            recovery_filename = f"untitled_{timestamp}.recovery"
+            
+        recovery_path = os.path.join(self.recovery_dir, recovery_filename)
+        
+        # Save recovery file
+        with open(recovery_path, 'w', encoding='utf-8') as f:
+            f.write(content)
+            
+        # Keep only last N recovery files
+        self.cleanup_old_recovery_files()
+        
     def cleanup_old_recovery_files(self, keep=10):
         """Clean up old recovery files, keeping only the most recent ones."""
         try:
