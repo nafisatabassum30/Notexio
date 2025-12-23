@@ -1,6 +1,6 @@
 # Notexio — CSE323 (Operating Systems Design) Project Report
 
-**Project name:**** Notexio Text Editor  
+**Project name:** Notexio Text Editor  
 **Course:** CSE323 — Operating Systems Design  
 **Student name:** Nafisa Tabassum  
 **Student ID:** 2221466042  
