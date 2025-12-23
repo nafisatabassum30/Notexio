@@ -2,13 +2,14 @@
 
 **Project name:** Notexio Text Editor  
 **Course:** CSE323 — Operating Systems Design  
-**Student name:** _[Fill]_  
-**Student ID:** _[Fill]_  
-**Section / Instructor:** _[Fill]_  
-**Semester:** _[Fill]_  
-**Submission date:** _[Fill]_  
-**GitHub repository:** _[Fill link]_  
-**GitHub Pages project page:** _[Fill link]_  
+**Student name:** Nafisa Tabassum 
+**Student ID:** 2221466042  
+**Section** 14
+**Instructor:** Dr. Safat Siddiqui
+**Semester:** Fall 2025
+**Submission date:** 23.12.25  
+**GitHub repository:** https://github.com/nafisatabassum30/Notexio
+**GitHub Pages project page:** https://nafisatabassum30.github.io/Notexio/  
 **Demo video (2–5 min):** _[Fill link]_  
 
 ---
@@ -183,7 +184,7 @@ The course requirement asks for challenges described using **STAR**:
 
 ---
 
-## 8) Submission Checklist (What you will include on GitHub)
+## 8) Submission Checklist (What included on GitHub)
 
 - `docs/index.md` (GitHub Pages landing page)
 - `docs/Notexio_CSE323_Report.pdf` (the report PDF)
