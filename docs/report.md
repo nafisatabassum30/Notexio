@@ -10,7 +10,7 @@
 **Submission date:** 23.12.25  
 **GitHub repository:** https://github.com/nafisatabassum30/Notexio
 **GitHub Pages project page:** https://nafisatabassum30.github.io/Notexio/  
-**Demo video (2–5 min):** _[Fill link]_  
+**Demo video (2–5 min):** https://youtu.be/5XnIDQdSf2A
 
 ---
 
