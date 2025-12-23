@@ -199,3 +199,11 @@ The course requirement asks for challenges described using **STAR**:
 - ReportLab documentation (`SimpleDocTemplate`, `Paragraph`)
 - OS printing concepts (`lp/lpr`, Win32 print pipeline)
 
+---
+
+## 10) Conclusion
+
+Notexio demonstrates OS design concepts through a real GUI application: safe file I/O, graceful OS integration, and reliability-focused features like recovery and safe shutdown. Key lessons were event-driven design, cross-platform behavior, and building safeguards that mirror professional desktop editors
+
+---
+
