@@ -6,7 +6,7 @@ Welcome to **Notexio**, a lightweight, customizable text editor built with **Pyt
 
 - **Project report (PDF)**: [Notexio_CSE323_Report.pdf](Notexio_CSE323_Report.pdf)
 - **Project report (Markdown)**: [report.md](report.md)
-- **Demo video (2–5 minutes)**: _[paste your link here]_
+- **Demo video (2–5 minutes)**: https://youtu.be/5XnIDQdSf2A
 - **Repository**: https://github.com/nafisatabassum30/Notexio
 
 ## What Notexio Demonstrates (OS-Relevant)
